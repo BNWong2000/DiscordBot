@@ -32,10 +32,10 @@ public class BlackJack {
 
 
   }
-  public void startGame(){
+  private void startGame(){
 
   }
 
-
+  
 
 }

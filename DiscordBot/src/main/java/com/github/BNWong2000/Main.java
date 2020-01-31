@@ -38,7 +38,7 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException{
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        String token = "NjcxMTkxODEwNDMyODI3NDA3.XjHClw.HJF97WP0hvluPFeoKTGaOhFLTMs";
+        String token = "";
         status = GameStatus.NONE;
         players = new ArrayList<Player>();
         playerIDs = new ArrayList<User>();
