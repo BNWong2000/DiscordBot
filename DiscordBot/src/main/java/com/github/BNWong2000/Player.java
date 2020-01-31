@@ -6,6 +6,8 @@ import Hand;
 public class Player {
 
   private Hand myHand;
+  private String myName;
+  //userid 
 
 
 }
