@@ -21,7 +21,8 @@ public class Main extends ListenerAdapter {
     private static ArrayList<User> playerIDs;
     private static ArrayList<Player> players;
     private User dealerID;
-
+    private BlackJack bj;
+    
     enum GameStatus{
         NONE,
         LOOKINGFORPLAYERS,
@@ -38,7 +39,7 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException{
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        String token = "";
+        String token = "NjcxMTkxODEwNDMyODI3NDA3.XjR6zQ.Ni9QWydVfZv9hLQKaSTOnlduPSA";
         status = GameStatus.NONE;
         players = new ArrayList<Player>();
         playerIDs = new ArrayList<User>();
@@ -68,6 +69,8 @@ public class Main extends ListenerAdapter {
                         event.getChannel().sendMessage("A game is already in progress").queue();
                     } else {
                         host = event.getAuthor().getName();
+                        this.bj = new BlackJack();
+                        bj.startGame(event.getChannel());
                         event.getChannel().sendMessage(host + " has started a blackjack game, type !join to join this game.").queue();
                         Main.status = GameStatus.LOOKINGFORPLAYERS;
                         Player temp = new Player(host, event.getAuthor());
@@ -82,6 +85,7 @@ public class Main extends ListenerAdapter {
                         if (players.contains(event.getAuthor().getName())) {
                             event.getChannel().sendMessage(event.getAuthor().getName() + " is already a player in this game.").queue();
                         } else {
+                        	bj.addPlayer(event.getAuthor());
                             event.getChannel().sendMessage("Added " + event.getAuthor().getName() + " to " + host + "'s game.").queue();
                             Player temp = new Player(event.getAuthor().getName(), event.getAuthor());
                             players.add(temp);

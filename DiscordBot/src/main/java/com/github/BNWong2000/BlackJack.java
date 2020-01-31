@@ -6,6 +6,7 @@ import java.util.ArrayList;
 //import Deck;
 
 import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.User;
 
 
@@ -16,7 +17,8 @@ public class BlackJack {
        LOOKINGFORPLAYERS,
        STARTED
   }
-
+  
+  private MessageChannel gameChannel;
   private ArrayList<Player> players;
   private Player dealer;
   private Player currentTurn;
@@ -29,13 +31,18 @@ public class BlackJack {
     this.theDeck = new Deck();
     this.theDeck.shuffle();
     status = GameStatus.LOOKINGFORPLAYERS;
+    players = new ArrayList<Player>();
 
 
   }
-  private void startGame(){
-
+  public void startGame(MessageChannel gChannel){
+	  this.gameChannel = gChannel;
   }
 
-  
+  public void addPlayer(User newPlayer) {
+	  
+	  this.players.add(new Player(newPlayer.getName(),newPlayer));
+	  
+  }
 
 }
