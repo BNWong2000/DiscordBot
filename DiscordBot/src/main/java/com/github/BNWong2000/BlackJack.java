@@ -10,21 +10,23 @@ import net.dv8tion.jda.api.entities.User;
 
 public BlackJack {
   
-  private Arraylist<Player> players;
-  private Player currentTurn;
-  private Deck theDeck;
-  private 
-
   enum GameStatus{
        NONE,
        LOOKINGFORPLAYERS,
        STARTED
   }
+  
+  private Arraylist<Player> players;
+  private Player currentTurn;
+  private Deck theDeck;
+  private GameStatus status;
+
+ 
 
   public BlackJack (){
     this.theDeck = new Deck();
     this.theDeck.shuffle();
-    
+    status = GameStatus.LOOKINGFORPLAYERS;
     
     
   }
