@@ -25,18 +25,22 @@ public class BlackJack {
   private Deck theDeck;
   private GameStatus status;
 
+  
 
-
-  public BlackJack (){
+  public BlackJack (MessageChannel gC){
     this.theDeck = new Deck();
     this.theDeck.shuffle();
-    status = GameStatus.LOOKINGFORPLAYERS;
-    players = new ArrayList<Player>();
-
-
+    this.status = GameStatus.LOOKINGFORPLAYERS;
+    this.players = new ArrayList<Player>();
+    this.gameChannel = gC;
   }
-  public void startGame(MessageChannel gChannel){
-	  this.gameChannel = gChannel;
+  
+  public MessageChannel getChannel() {
+	  return gameChannel;
+  }
+  
+  public void startGame(){
+	 
   }
 
   public void addPlayer(User newPlayer) {
@@ -45,4 +49,10 @@ public class BlackJack {
 	  
   }
 
+  public String message() {
+	
+	  
+	  return "";
+	  
+  }
 }

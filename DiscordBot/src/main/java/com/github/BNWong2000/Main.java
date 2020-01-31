@@ -21,7 +21,7 @@ public class Main extends ListenerAdapter {
     private static ArrayList<User> playerIDs;
     private static ArrayList<Player> players;
     private User dealerID;
-    private BlackJack bj;
+    private ArrayList<BlackJack> bj = new ArrayList<BlackJack>();
     
     enum GameStatus{
         NONE,
@@ -43,6 +43,7 @@ public class Main extends ListenerAdapter {
         status = GameStatus.NONE;
         players = new ArrayList<Player>();
         playerIDs = new ArrayList<User>();
+       
 
         builder.setToken(token);
         builder.addEventListeners(new Main());
@@ -65,41 +66,35 @@ public class Main extends ListenerAdapter {
                     event.getChannel().sendMessage("Memes").queue();
                     break;
                 case "!BlackJack":
-                    if (Main.status != GameStatus.NONE) {
-                        event.getChannel().sendMessage("A game is already in progress").queue();
-                    } else {
-                        host = event.getAuthor().getName();
-                        this.bj = new BlackJack();
-                        bj.startGame(event.getChannel());
-                        event.getChannel().sendMessage(host + " has started a blackjack game, type !join to join this game.").queue();
-                        Main.status = GameStatus.LOOKINGFORPLAYERS;
-                        Player temp = new Player(host, event.getAuthor());
-                        players.add(temp);
-                        playerIDs.add(event.getAuthor());
-                    }
+                	boolean isGame = false;
+                	for(int i = 0; i < bj.size(); i ++) {
+                		if (bj.get(i).getChannel() == event.getChannel()) {
+                			isGame = true;
+                			break;
+                		}
+                	}
+                	if (isGame) {
+                		event.getChannel().sendMessage("A Game Is Already In Progress In This Channel.");
+                	} else {
+                		bj.add(new BlackJack(event.getChannel()));
+                		event.getChannel().sendMessage("A Game Has Been Started. Type !join To Join The Game.");
+                	}
                     break;
                 case "!join":
-                    if (Main.status != GameStatus.LOOKINGFORPLAYERS) {
-                        event.getChannel().sendMessage("You cannot join at this time.").queue();
-                    } else {
-                        if (players.contains(event.getAuthor().getName())) {
-                            event.getChannel().sendMessage(event.getAuthor().getName() + " is already a player in this game.").queue();
-                        } else {
-                        	bj.addPlayer(event.getAuthor());
-                            event.getChannel().sendMessage("Added " + event.getAuthor().getName() + " to " + host + "'s game.").queue();
-                            Player temp = new Player(event.getAuthor().getName(), event.getAuthor());
-                            players.add(temp);
-                            playerIDs.add(event.getAuthor());
-                        }
-                    }
+                	for(int i = 0; i < bj.size(); i ++) {
+                		if (bj.get(i).getChannel() == event.getChannel()) {
+                			event.getChannel().sendMessage( bj.get(i).message());
+                			break;
+                		}
+                	}
                     break;
                 case "!Start":
-                    if (players.size() < 2 || Main.status != GameStatus.LOOKINGFORPLAYERS) {
-                        event.getChannel().sendMessage("Cannot start a game at this time.").queue();
-                    } else {
-                        Main.status = GameStatus.STARTED;
-                        event.getChannel().sendMessage("Starting " + host + "'s game...").queue();
-                    }
+                	for(int i = 0; i < bj.size(); i ++) {
+                		if (bj.get(i).getChannel() == event.getChannel()) {
+                			event.getChannel().sendMessage( bj.get(i).message());
+                			break;
+                		}
+                	}
                     break;
                 case "!End":
                     Main.status = GameStatus.NONE;
