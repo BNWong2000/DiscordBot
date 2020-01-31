@@ -1,13 +1,43 @@
 package com.github.BNWong2000;
 
-import Card;
-import Hand;
+import net.dv8tion.jda.api.entities.User;
+
+//import Card;
+//import Hand;
 
 public class Player {
 
   private Hand myHand;
   private String myName;
-  //userid 
+  private User user;
+
+  public Player(String name, User user){
+    this.myName = name;
+    this.user = user;
+  }
 
 
+  public Hand getMyHand() {
+    return myHand;
+  }
+
+  public void setMyHand(Hand myHand) {
+    this.myHand = myHand;
+  }
+
+  public String getMyName() {
+    return myName;
+  }
+
+  public void setMyName(String myName) {
+    this.myName = myName;
+  }
+
+  public User getUser() {
+    return user;
+  }
+
+  public void setUser(User user) {
+    this.user = user;
+  }
 }

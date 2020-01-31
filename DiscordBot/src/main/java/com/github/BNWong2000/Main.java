@@ -16,9 +16,10 @@ import javax.security.auth.login.LoginException;
 public class Main extends ListenerAdapter {
     private static GameStatus status;
     //private int numPlayers;
-    private String dealer; //TODO: delete this and use the dealerID object instead.
-    private static ArrayList<String> players; //TODO: delete this and use the playerIDs arrayList instead.
+    private String host; //TODO: delete this and use the dealerID object instead.
+    //private static ArrayList<String> players; //TODO: delete this and use the playerIDs arrayList instead.
     private static ArrayList<User> playerIDs;
+    private static ArrayList<Player> players;
     private User dealerID;
 
     enum GameStatus{
@@ -37,9 +38,9 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException{
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        String token = "token goes here.";
+        String token = "NjcxMTkxODEwNDMyODI3NDA3.XjHClw.HJF97WP0hvluPFeoKTGaOhFLTMs";
         status = GameStatus.NONE;
-        players = new ArrayList<String>();
+        players = new ArrayList<Player>();
         playerIDs = new ArrayList<User>();
 
         builder.setToken(token);
@@ -66,10 +67,11 @@ public class Main extends ListenerAdapter {
                     if (Main.status != GameStatus.NONE) {
                         event.getChannel().sendMessage("A game is already in progress").queue();
                     } else {
-                        dealer = event.getAuthor().getName();
-                        event.getChannel().sendMessage(dealer + " has started a blackjack game, type !join to join this game.").queue();
+                        host = event.getAuthor().getName();
+                        event.getChannel().sendMessage(host + " has started a blackjack game, type !join to join this game.").queue();
                         Main.status = GameStatus.LOOKINGFORPLAYERS;
-                        players.add(dealer);
+                        Player temp = new Player(host, event.getAuthor());
+                        players.add(temp);
                         playerIDs.add(event.getAuthor());
                     }
                     break;
@@ -80,8 +82,9 @@ public class Main extends ListenerAdapter {
                         if (players.contains(event.getAuthor().getName())) {
                             event.getChannel().sendMessage(event.getAuthor().getName() + " is already a player in this game.").queue();
                         } else {
-                            event.getChannel().sendMessage("Added " + event.getAuthor().getName() + " to " + dealer + "'s game.").queue();
-                            players.add(event.getAuthor().getName());
+                            event.getChannel().sendMessage("Added " + event.getAuthor().getName() + " to " + host + "'s game.").queue();
+                            Player temp = new Player(event.getAuthor().getName(), event.getAuthor());
+                            players.add(temp);
                             playerIDs.add(event.getAuthor());
                         }
                     }
@@ -91,14 +94,14 @@ public class Main extends ListenerAdapter {
                         event.getChannel().sendMessage("Cannot start a game at this time.").queue();
                     } else {
                         Main.status = GameStatus.STARTED;
-                        event.getChannel().sendMessage("Starting " + dealer + "'s game...").queue();
+                        event.getChannel().sendMessage("Starting " + host + "'s game...").queue();
                     }
                     break;
                 case "!End":
                     Main.status = GameStatus.NONE;
-                    event.getChannel().sendMessage("Ending " + dealer + "'s game...").queue();
+                    event.getChannel().sendMessage("Ending " + host + "'s game...").queue();
                     players.clear();
-                    dealer = null;
+                    host = null;
                     break;
                 case "!List":
                     event.getChannel().sendMessage(" Current Players:").queue();

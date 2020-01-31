@@ -20,7 +20,7 @@ public class Deck {
         
         Random rand = new Random();
         
-        for(int i = 0; i < array.length; i++){
+        for(int i = 0; i < deck.length; i++){
             int rIndex = rand.nextInt(deck.length);
             Card temp = deck[rIndex];
             deck[rIndex] = deck[i];
