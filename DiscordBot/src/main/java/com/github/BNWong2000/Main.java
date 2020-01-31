@@ -39,7 +39,7 @@ public class Main extends ListenerAdapter {
 
     public static void main(String[] args) throws LoginException{
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        String token = "NjcxMTkxODEwNDMyODI3NDA3.XjR6zQ.Ni9QWydVfZv9hLQKaSTOnlduPSA";
+        String token = "";
         status = GameStatus.NONE;
         players = new ArrayList<Player>();
         playerIDs = new ArrayList<User>();
@@ -83,7 +83,7 @@ public class Main extends ListenerAdapter {
                 case "!join":
                 	for(int i = 0; i < bj.size(); i ++) {
                 		if (bj.get(i).getChannel() == event.getChannel()) {
-                			event.getChannel().sendMessage( bj.get(i).message());
+                			event.getChannel().sendMessage( bj.get(i).message(event.getAuthor(),Message));
                 			break;
                 		}
                 	}
@@ -91,7 +91,7 @@ public class Main extends ListenerAdapter {
                 case "!Start":
                 	for(int i = 0; i < bj.size(); i ++) {
                 		if (bj.get(i).getChannel() == event.getChannel()) {
-                			event.getChannel().sendMessage( bj.get(i).message());
+                			event.getChannel().sendMessage( bj.get(i).message(event.getAuthor(),Message));
                 			break;
                 		}
                 	}

@@ -40,7 +40,7 @@ public class BlackJack {
   }
   
   public void startGame(){
-	 
+	 status = GameStatus.STARTED;
   }
 
   public void addPlayer(User newPlayer) {
@@ -49,10 +49,33 @@ public class BlackJack {
 	  
   }
 
-  public String message() {
-	
+  public String message(User p,String message) {
+	  //This is where we should interpret the users message and call the appropriate function
+	  String rMessage = "";
+	  if(message == "!join") {
+		  if(status == GameStatus.LOOKINGFORPLAYERS) {
+			  boolean isIn = false;
+			  for (int i = 0; i < players.size();i++) {
+				  if (players.get(i).getUser() == p) {
+					  isIn = true;
+					  break;
+				  }
+			  }
+			  if(isIn) {
+				  rMessage = p.getName() + " is already in the game.";
+			  }else {
+				  players.add(new Player(p.getName(),p));
+				  rMessage = p.getName() + " has joined the game.";
+			  }
+		  } else {
+			  rMessage = "Players Cannot Join Now";
+		  }
+	  } else if (message == "!Start") {
+		  this.startGame();
+		  rMessage = "The Game Has Started!";
+	  }
 	  
-	  return "";
+	  return rMessage;//return what you want to print
 	  
   }
 }
