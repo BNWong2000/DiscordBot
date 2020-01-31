@@ -12,6 +12,14 @@ public BlackJack {
   
   private Arraylist<User> players
   
+    
+    enum GameStatus{
+        NONE,
+        LOOKINGFORPLAYERS,
+        STARTED
+    }
+
+  
   
   
 }
