@@ -1,6 +1,7 @@
 package com.github.BNWong2000;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Deck {
     private Card[] deck;
@@ -16,7 +17,15 @@ public class Deck {
     }
 
     public void shuffle(){
-        //
+        
+        Random rand = new Random();
+        
+        for(int i = 0; i < array.length; i++){
+            int rIndex = rand.nextInt(deck.length);
+            Card temp = deck[rIndex];
+            deck[rIndex] = deck[i];
+            deck[i] = temp;
+        }
     }
 
 }
