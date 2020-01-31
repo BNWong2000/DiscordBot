@@ -17,6 +17,7 @@ public BlackJack {
   }
   
   private Arraylist<Player> players;
+  private Player dealer;
   private Player currentTurn;
   private Deck theDeck;
   private GameStatus status;
