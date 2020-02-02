@@ -49,7 +49,7 @@ public class BlackJack {
 	  
   }
 
-  public String message(User p,String message) {
+  public String message(User p, String message) {
 	  //This is where we should interpret the users message and call the appropriate function
 	  String rMessage = "";
 	  if(message == "!join") {

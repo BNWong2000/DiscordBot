@@ -74,16 +74,16 @@ public class Main extends ListenerAdapter {
                 		}
                 	}
                 	if (isGame) {
-                		event.getChannel().sendMessage("A Game Is Already In Progress In This Channel.");
+                		event.getChannel().sendMessage("A Game Is Already In Progress In This Channel.").queue();
                 	} else {
                 		bj.add(new BlackJack(event.getChannel()));
-                		event.getChannel().sendMessage("A Game Has Been Started. Type !join To Join The Game.");
+                		event.getChannel().sendMessage("A Game Has Been Started. Type !join To Join The Game.").queue();
                 	}
                     break;
                 case "!join":
                 	for(int i = 0; i < bj.size(); i ++) {
                 		if (bj.get(i).getChannel() == event.getChannel()) {
-                			event.getChannel().sendMessage( bj.get(i).message(event.getAuthor(),Message));
+                			event.getChannel().sendMessage( bj.get(i).message(event.getAuthor(),Message)).queue();
                 			break;
                 		}
                 	}
@@ -91,7 +91,7 @@ public class Main extends ListenerAdapter {
                 case "!Start":
                 	for(int i = 0; i < bj.size(); i ++) {
                 		if (bj.get(i).getChannel() == event.getChannel()) {
-                			event.getChannel().sendMessage( bj.get(i).message(event.getAuthor(),Message));
+                			event.getChannel().sendMessage( bj.get(i).message(event.getAuthor(),Message)).queue();
                 			break;
                 		}
                 	}
