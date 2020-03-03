@@ -53,8 +53,8 @@ public class BlackJack {
 	  //This is where we should interpret the users message and call the appropriate function
 	  String rMessage = "";
 	  if(message == "!join") {
+		  boolean isIn = false;
 		  if(status == GameStatus.LOOKINGFORPLAYERS) {
-			  boolean isIn = false;
 			  for (int i = 0; i < players.size();i++) {
 				  if (players.get(i).getUser() == p) {
 					  isIn = true;
