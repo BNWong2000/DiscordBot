@@ -30,7 +30,7 @@ public class ChatReader extends ListenerAdapter{
     @Override
     public void onMessageReceived(MessageReceivedEvent event){
         String message = event.getMessage().getContentRaw();
-        getManager().setMyString(message);
+        getManager().setMessage(message);
         event.getChannel().sendMessage(getManager().getResponse()).queue();
     }
 }

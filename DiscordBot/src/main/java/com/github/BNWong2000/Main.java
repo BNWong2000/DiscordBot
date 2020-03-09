@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 import javax.security.auth.login.LoginException;
 
 
@@ -38,8 +39,11 @@ public class Main extends ListenerAdapter {
     }
 
     public static void main(String[] args) throws LoginException{
+        Scanner scan = new Scanner(System.in);
         JDABuilder builder = new JDABuilder(AccountType.BOT);
-        String token = args[0];
+        //String token = args[0];
+        System.out.print("Please Enter the bot token. \n");
+        String token = scan.nextLine();
         status = GameStatus.NONE;
         players = new ArrayList<Player>();
         playerIDs = new ArrayList<User>();
