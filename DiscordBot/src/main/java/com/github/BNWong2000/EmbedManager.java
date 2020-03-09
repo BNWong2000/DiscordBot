@@ -19,6 +19,11 @@ public class EmbedManager {
         return myEmbed;
     }
 
+    public void setImage(String pathToImage){
+        myEmbed.setImage();
+    }
+
+
     public void setFields(ArrayList<String> fieldNames, ArrayList<String> fieldDescription){
         if(fieldNames.size() > fieldDescription.size()){
             return;
