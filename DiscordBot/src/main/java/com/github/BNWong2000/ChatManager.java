@@ -51,7 +51,6 @@ public class ChatManager extends ListenerAdapter{
             getManager().setMessage(messageStr);
             getManager().setTheUser(event.getAuthor());
             event.getChannel().sendMessage(getManager().getResponse()).queue();
-
             if(getManager().getNeedsEmbed()){
                 event.getChannel().sendMessage(getManager().getEmbed().getMyEmbed().build()).queue();
             }

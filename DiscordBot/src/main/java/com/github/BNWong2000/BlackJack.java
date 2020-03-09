@@ -28,6 +28,14 @@ public class BlackJack {
         return players;
     }
 
+    public boolean userInGame(String userName){
+        for(int i = 0; i < players.size(); ++i){
+            if(players.get(i).getUser().getName() == userName){
+                return true;
+            }
+        }
+        return false;
+    }
     public String getPlayerListString(){
         //
         String result = "";
@@ -37,6 +45,15 @@ public class BlackJack {
         }
         return result;
     }
+
+    public GameStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameStatus status){
+        this.status = status;
+    }
+
 
     public void addPlayer(Player gamePlayer){
         players.add(gamePlayer);

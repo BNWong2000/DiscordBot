@@ -50,12 +50,30 @@ public class CommandManager {
                 output = getCommandList();
                 break;
             case "!BlackJack":
-                blackJackGame = new BlackJack(new Player(theUser.getName().toString(), theUser));
-                embed = new EmbedManager("BlackJack Game:");
-                embed.setImage("https://github.com/BNWong2000/DiscordBot/blob/master/DiscordBot/BlackJackLogo.jpg");
-                startGameEmbed();
-                needsEmbed = true;
-                output = " Starting BlackJack Game....";
+                if(blackJackGame != null){
+                    if(blackJackGame.userInGame(theUser.getName().toString())){
+                        output = "User is already in the game!";
+                    }else {
+                        if(blackJackGame.getStatus() == BlackJack.GameStatus.LOOKINGFORPLAYERS){
+                            blackJackGame.addPlayer(new Player(theUser.getName().toString(), theUser));
+                            needsEmbed = true;
+                            output = "Adding " + theUser.getName().toString() + " to the game...";
+                        }else{
+                            output = "Cannot join the game at this time.";
+                        }
+                    }
+                }else {
+                    blackJackGame = new BlackJack(new Player(theUser.getName().toString(), theUser));
+                    needsEmbed = true;
+                    blackJackGame.setStatus(BlackJack.GameStatus.LOOKINGFORPLAYERS);
+                    output = " Starting BlackJack Game....";
+                }
+
+                if(needsEmbed){
+                    embed = new EmbedManager("BlackJack Game:");
+                    embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg"); //TODO: Change this link.
+                    startGameEmbed();
+                }
                 break;
             default:
                 output = "Invalid command. type !commands for a list of commands.";
@@ -78,7 +96,7 @@ public class CommandManager {
 
     private String getCommandList() {
         String result = "";
-        result += "!BlackJack [X]- Starts a blackjack game with X number of players\n";
+        result += "!BlackJack - Starts a blackjack game if it has not been created, or joins the game if it has been.\n";
         result += "!commands - lists the commands\n";
         return result;
     }
