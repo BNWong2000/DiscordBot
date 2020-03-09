@@ -1,6 +1,6 @@
 package com.github.BNWong2000;
 
-public class Card {
+public class Card{
     public static String[] Suits = {"Diamonds", "Hearts", "Clubs", "Spades"};
     public static String[] Values = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "Joker"};
 
