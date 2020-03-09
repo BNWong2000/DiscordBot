@@ -52,6 +52,7 @@ public class CommandManager {
             case "!BlackJack":
                 blackJackGame = new BlackJack(new Player(theUser.getName().toString(), theUser));
                 embed = new EmbedManager("BlackJack Game:");
+                embed.setImage("https://github.com/BNWong2000/DiscordBot/blob/master/DiscordBot/BlackJackLogo.jpg");
                 startGameEmbed();
                 needsEmbed = true;
                 output = " Starting BlackJack Game....";

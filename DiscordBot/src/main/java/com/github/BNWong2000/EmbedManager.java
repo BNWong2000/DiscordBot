@@ -20,7 +20,7 @@ public class EmbedManager {
     }
 
     public void setImage(String pathToImage){
-        myEmbed.setImage();
+        myEmbed.setImage(pathToImage);
     }
 
 
