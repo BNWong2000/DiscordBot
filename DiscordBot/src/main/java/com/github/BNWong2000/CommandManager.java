@@ -22,6 +22,16 @@ public class CommandManager {
         this.theUser = theUser;
     }
 
+    public User getTheUser(){
+        return theUser;
+    }
+
+    public BlackJack getBlackJackGame(){
+        return blackJackGame;
+    }
+
+
+
     public void setMessage(String message) {
         this.message = message;
     }
@@ -33,6 +43,11 @@ public class CommandManager {
     public boolean getNeedsEmbed(){
         return needsEmbed;
     }
+
+    public void setNeedsEmbed(boolean needsEmbed){
+        this.needsEmbed = needsEmbed;
+    }
+
 
     public EmbedManager getEmbed(){
         return embed;
@@ -71,13 +86,42 @@ public class CommandManager {
 
                 if(needsEmbed){
                     embed = new EmbedManager("BlackJack Game:");
-                    embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg"); //TODO: Change this link.
+                    embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg");
                     startGameEmbed();
                 }
                 break;
             default:
                 output = "Invalid command. type !commands for a list of commands.";
 
+        }
+        return output;
+    }
+
+    public String getDMResponse(){
+        String output;
+        setNeedsEmbed(false);
+        getWords();
+        switch(getSplitMessage().get(0)) {
+            case "!Hand":
+                if(blackJackGame != null){
+                    if (!blackJackGame.userInGame(getTheUser().getName().toString())) {
+                        output = "User is not in the game!";
+                    } else {
+                        output = "Your current hand: ";
+                        needsEmbed = true;
+
+                    }
+                }else{
+                    output = "No game in progress.";
+                }
+                if(needsEmbed){
+                    embed = new EmbedManager("Your Hand: ");
+                    embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg");
+                    startHandEmbed();
+                }
+                break;
+            default:
+                output = "This is a DM";
         }
         return output;
     }
@@ -92,6 +136,15 @@ public class CommandManager {
         ArrayList<String> description = new ArrayList<>();
         description.add(blackJackGame.getPlayerListString());
         embed.setFields(names, description);
+    }
+
+    private void startHandEmbed(){
+        if(embed == null){
+            System.err.print("Embed not created yet. ");
+            return;
+        }
+
+
     }
 
     private String getCommandList() {

@@ -4,5 +4,5 @@ public class DirectEmbedManager extends EmbedManager {
     public DirectEmbedManager(String title) {
         super(title);
     }
-    /*  */
+
 }

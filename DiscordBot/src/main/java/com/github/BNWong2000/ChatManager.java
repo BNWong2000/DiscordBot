@@ -15,20 +15,20 @@ import javax.security.auth.login.LoginException;
 
 public class ChatManager extends ListenerAdapter{
     private CommandManager manager;
-    private DirectMessageManager dMManager;
+    //private DirectMessageManager dMManager;
 
     public ChatManager(){
         manager = new CommandManager();
-        dMManager = new DirectMessageManager();
+        //dMManager = new DirectMessageManager();
     }
 
     public CommandManager getManager() {
         return manager;
     }
 
-    public DirectMessageManager getdMManager(){
-        return dMManager;
-    }
+    //public DirectMessageManager getdMManager(){
+    //    return dMManager;
+    //}
 
     public void setManager(CommandManager manager){
         this.manager = manager;
@@ -44,9 +44,13 @@ public class ChatManager extends ListenerAdapter{
             return;
         }
         if(message.isFromType(ChannelType.PRIVATE)){
-            getdMManager().setMessage(messageStr);
-            String response = getdMManager().getResponse();
+            getManager().setMessage(messageStr);
+            getManager().setTheUser(event.getAuthor());
+            String response = getManager().getDMResponse();
             event.getChannel().sendMessage(response).queue();
+            if(getManager().getNeedsEmbed()){
+                event.getChannel().sendMessage(getManager().getEmbed().getMyEmbed().build()).queue();
+            }
         }else if(messageStr.startsWith("!")){
             getManager().setMessage(messageStr);
             getManager().setTheUser(event.getAuthor());
