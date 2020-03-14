@@ -37,7 +37,15 @@ public class BlackJack {
         return false;
     }
 
-    
+    public Player getUserByName(String userName){
+        for(int i = 0; i < players.size(); ++i){
+            if(players.get(i).getUser().getName() == userName){
+                return players.get(i);
+            }
+        }
+        return null;
+    }
+
     public String getPlayerListString(){
         //
         String result = "";

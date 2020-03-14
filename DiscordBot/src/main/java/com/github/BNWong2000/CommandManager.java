@@ -70,7 +70,7 @@ public class CommandManager {
                         output = "User is already in the game!";
                     }else {
                         if(blackJackGame.getStatus() == BlackJack.GameStatus.LOOKINGFORPLAYERS){
-                            blackJackGame.addPlayer(new Player(theUser.getName().toString(), theUser));
+                            blackJackGame.addPlayer(new Player(theUser));
                             needsEmbed = true;
                             output = "Adding " + theUser.getName().toString() + " to the game...";
                         }else{
@@ -78,7 +78,7 @@ public class CommandManager {
                         }
                     }
                 }else {
-                    blackJackGame = new BlackJack(new Player(theUser.getName().toString(), theUser));
+                    blackJackGame = new BlackJack(new Player( theUser));
                     needsEmbed = true;
                     blackJackGame.setStatus(BlackJack.GameStatus.LOOKINGFORPLAYERS);
                     output = " Starting BlackJack Game....";
@@ -107,9 +107,9 @@ public class CommandManager {
                     if (!blackJackGame.userInGame(getTheUser().getName().toString())) {
                         output = "User is not in the game!";
                     } else {
-                        output = "Your current hand: ";
+                        output = "Your current hand: \n";
+                        output += blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards().get(1).printCard();
                         needsEmbed = true;
-
                     }
                 }else{
                     output = "No game in progress.";
@@ -143,6 +143,8 @@ public class CommandManager {
             System.err.print("Embed not created yet. ");
             return;
         }
+        ArrayList<Card> cards = blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards();
+        embed.printCardField(cards);
 
 
 

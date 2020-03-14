@@ -31,18 +31,31 @@ public class Card implements Suits, CardValues{
     public String printCard(){
         String result = printHorizontalLine();
         result += "\n";
-        result += "|" + getSuitSymbol();
-        result += "            |\n";
-        result += "|" + getValue();
-        result += "            |\n";
-        result += "|             |\n";
-        result += "|             |\n";
-        result += "|             |\n";
-        result += "|            ";
-        result += getValue() + "|\n";
-        result += "|            ";
-        result += getSuitSymbol() + "|\n";
+//        result += "|" + getSuitSymbol();
+//        result +=  printWhiteSpace()  + "|\n";
+        result += topOfCardSuit[suit];
+//        result += "|" + getValue();
+//        result +=  printWhiteSpace() + "|\n";
+        result += topOfCardValue[value];
+        result += "|" + printWhiteSpace() + "\u2003" + "|\n";
+        result += "|" + printWhiteSpace() + "\u2003" + "|\n";
+        result += "|" + printWhiteSpace() + "\u2003" + "|\n";
+//        result += "|" +  printWhiteSpace() ;
+//        result += getValue() + "|\n";
+//        result += "|" +  printWhiteSpace() ;
+//        result += getSuitSymbol() + "|\n";
+        result += bottomOfCardValue[value];
+        result += bottomOfCardSuit[suit];
         result += printHorizontalLine();
+        return result;
+    }
+
+    private String printWhiteSpace(){
+        String result = "";
+        int numSpaces = 6;
+        for(int i = 0; i < numSpaces; ++i) {
+            result += "\u2003";
+        }
         return result;
     }
 
@@ -51,12 +64,12 @@ public class Card implements Suits, CardValues{
     }
 
     private String printHorizontalLine(){
-        return " ---------- ";
+        return "---------------";
     }
 
     @Override
     public String toString() {
-        String result = ("Suit: " + suitList[suit] + " Value: " + valueList[value] + "\n");
+        String result = (valueList[value] + " of " + suitList[suit] + "\n");
         return result;
     }
 }

@@ -11,9 +11,10 @@ public class Player {
   private String myName;
   private User user;
 
-  public Player(String name, User user){
-    this.myName = name;
+  public Player( User user){
+    this.myName = user.getName();
     this.user = user;
+    myHand = new Hand();
   }
 
 
