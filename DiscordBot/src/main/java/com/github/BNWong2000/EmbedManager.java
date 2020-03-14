@@ -33,6 +33,12 @@ public class EmbedManager {
         }
     }
 
+    public void printCardField(ArrayList<Card> cards){
+        for(int i = 0; i < cards.size(); ++i){
+            myEmbed.addField(cards.get(i).toString(), cards.get(i).printCard(), true);
+        }
+    }
+
 
 
 }

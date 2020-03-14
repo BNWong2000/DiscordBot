@@ -1,23 +1,21 @@
 package com.github.BNWong2000;
 
-public class Card{
-    public static String[] Suits = {"Diamonds", "Hearts", "Clubs", "Spades"};
-    public static String[] Values = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "Joker"};
+public class Card implements Suits, CardValues{
 
 
     private int suit;
     private int value;
 
-    public int getSuit() {
-        return suit;
+    public String getSuit() {
+        return suitList[suit];
     }
 
     public void setSuit(int suit) {
         this.suit = suit;
     }
 
-    public int getValue() {
-        return value;
+    public String getValue() {
+        return valueList[value];
     }
 
     public void setValue(int value) {
@@ -27,6 +25,38 @@ public class Card{
     public Card(int suit, int value){
         this.suit = suit;
         this.value = value;
+        //System.out.print("Suit: " + suitList[suit] + " Value: " + valueList[value]);
     }
 
+    public String printCard(){
+        String result = printHorizontalLine();
+        result += "\n";
+        result += "|" + getSuitSymbol();
+        result += "            |\n";
+        result += "|" + getValue();
+        result += "            |\n";
+        result += "|             |\n";
+        result += "|             |\n";
+        result += "|             |\n";
+        result += "|            ";
+        result += getValue() + "|\n";
+        result += "|            ";
+        result += getSuitSymbol() + "|\n";
+        result += printHorizontalLine();
+        return result;
+    }
+
+    private String getSuitSymbol() {
+        return suitSymbolList[suit];
+    }
+
+    private String printHorizontalLine(){
+        return " ---------- ";
+    }
+
+    @Override
+    public String toString() {
+        String result = ("Suit: " + suitList[suit] + " Value: " + valueList[value] + "\n");
+        return result;
+    }
 }

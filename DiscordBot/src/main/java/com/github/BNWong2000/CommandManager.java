@@ -116,7 +116,7 @@ public class CommandManager {
                 }
                 if(needsEmbed){
                     embed = new EmbedManager("Your Hand: ");
-                    embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg");
+                    //embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg");
                     startHandEmbed();
                 }
                 break;
@@ -143,6 +143,7 @@ public class CommandManager {
             System.err.print("Embed not created yet. ");
             return;
         }
+
 
 
     }
