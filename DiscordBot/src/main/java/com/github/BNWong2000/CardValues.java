@@ -2,7 +2,7 @@ package com.github.BNWong2000;
 
 public interface CardValues {
     public final String[] valueList = { "A ", "2 ", "3 ", "4 ", "5 ", "6 ", "7 ", "8 ", "9 ", "10", "J ", "Q ", "K "};
-    public final int[] actualValues = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,};
+    public final int[] actualValues = {11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10,};
     public final String[] topOfCardValue = {"|A \u2003\u2003\u2003\u2003\u2003\u2003\u200A|\n",
             "|2 \u2003\u2003\u2003\u2003\u2003\u2003\u2009\u200A|\n",
             "|3 \u2003\u2003\u2003\u2003\u2003\u2003\u2005|\n",

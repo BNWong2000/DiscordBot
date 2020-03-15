@@ -11,6 +11,10 @@ public class Card implements Suits, CardValues{
         return suitList[suit];
     }
 
+    public int getCardValue(){
+        return actualValues[value];
+    }
+
     public void setSuit(int suit) {
         this.suit = suit;
     }
@@ -99,9 +103,12 @@ public class Card implements Suits, CardValues{
 
     @Override
     public String toString() {
-        String result = (valueList[value] + " of " + suitList[suit] + "\n");
-        if(faceDown){
-            result += "(FACEDOWN)\n";
+        String result;
+        if(!faceDown){
+            result = (valueList[value] + " of " + suitList[suit] + "\n");
+
+        }else{
+            result = "(FACEDOWN)\n";
         }
         return result;
     }

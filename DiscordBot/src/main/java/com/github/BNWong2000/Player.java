@@ -10,11 +10,13 @@ public class Player {
     private Hand myHand;
     private String myName;
     private User user;
+    private boolean lost;
 
     public Player( User user){
         this.myName = user.getName();
         this.user = user;
         myHand = new Hand();
+        lost = false;
     }
 
     public Hand getMyHand() {

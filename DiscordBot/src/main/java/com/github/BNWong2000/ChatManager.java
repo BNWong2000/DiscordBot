@@ -53,6 +53,10 @@ public class ChatManager extends ListenerAdapter{
         }
         if(getManager().getNeedsEmbed()){
             event.getChannel().sendMessage(getManager().getEmbed().getMyEmbed().build()).queue();
+            getManager().setNeedsEmbed(false);
+//            if(!getManager().getGameStarted()){
+//                getManager().endGame();
+//            }
         }
     }
 }

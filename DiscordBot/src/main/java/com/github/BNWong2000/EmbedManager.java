@@ -40,13 +40,31 @@ public class EmbedManager {
         //myEmbed.addField("Testing FaceDown", cards.get(0).printFaceDown(), true );
     }
 
+    public void printPublicHandCardField(ArrayList<Card> cards){
+        for(int i = 0; i < cards.size(); ++i){
+            myEmbed.addField(cards.get(i).toString(), cards.get(i).printCard(), true);
+        }
+        //myEmbed.addField("Testing FaceDown", cards.get(0).printFaceDown(), true );
+    }
+
     public void printTableField(ArrayList<String> players, ArrayList<ArrayList<Card> > hands){
         for(int i = 0; i < players.size(); ++i){
             myEmbed.addField("Cards for player: ", players.get(i), false);
             printCardField(hands.get(i));
             myEmbed.addBlankField(false);
         }
+        myEmbed.addField("next Player:", players.get(0) + " Starts first. ", false);
     }
+
+    public void printGameOverTableField(ArrayList<String> players, ArrayList<ArrayList<Card> > hands){
+        for(int i = 0; i < players.size(); ++i){
+            myEmbed.addField("Cards for player: ", players.get(i), false);
+            printHandCardField(hands.get(i));
+            myEmbed.addBlankField(false);
+        }
+    }
+
+
 
     public void printCardField(ArrayList<Card> cards){
         for(int i = 0; i < cards.size(); ++i){

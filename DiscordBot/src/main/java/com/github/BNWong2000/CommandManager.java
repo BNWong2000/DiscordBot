@@ -131,10 +131,64 @@ public class CommandManager {
         return blackJackGame.startGame();
     }
 
+    public void endGame(){
+        blackJackGame = null;
+        gameStarted = false;
+    }
+
     public String getGameResponse(){
-        String output = "";
+        String output;
+        getWords();
+        needsEmbed = false;
+        if(!getTheUser().getName().equals(blackJackGame.getCurrentTurnName())){
+            if(getSplitMessage().get(0).equals("!End")){
+                output = "ending game...";
+                endGame();
+                return output;
+            }else {
+                output = "Not your turn yet. ";
+                return output;
+            }
+        }
+        switch(getSplitMessage().get(0)){
+            case "!Hit":
+                output = "Getting your Card...";
+                output += blackJackGame.hit();
+                if(blackJackGame.getLastPlayerToBeEliminated() != null && blackJackGame.getLastPlayerToBeEliminated().getMyName() == getTheUser().getName()){
+                    needsEmbed = true;
+                    embed = new EmbedManager(getTheUser().getName() + "'s Hand:");
+                    startPlayerBustHandEmbed();
+                }else if(blackJackGame.getNumPlayers() > 1) {
+                    needsEmbed = true;
+                    embed = new EmbedManager(getTheUser().getName() + "'s Hand:");
+                    startPublicHandEmbed();
+                }else{
+                    gameStarted = false;
+                    blackJackGame = null;
+                }
+                break;
+            case "!Stand":
+                output = "Standing.\n";
+                if(blackJackGame.isAllPlayersStand() && blackJackGame.getCurrentTurnIndex() == blackJackGame.getNumPlayers()-1){
+                    output += "\n All Players stood last round. Game Over. Folding Cards...";
+                    needsEmbed = true;
+                    String winner = blackJackGame.getWinner();
+                    embed = new EmbedManager("Winner: " + winner);
+                    startGameOverTableEmbed();
+                    //gameStarted = false;
+                }
+                output += blackJackGame.endTurn();
+                break;
+            case "!End":
+                output = "ending the game.\n";
+                endGame();
+                break;
+            default:
+                output = "Invalid Command. ";
+        }
         return output;
     }
+
 
     public String getDMResponse(){
         String output;
@@ -182,9 +236,34 @@ public class CommandManager {
             System.err.print("Embed not created yet. ");
             return;
         }
-        ArrayList<Card> cards = blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards();
-        embed.printHandCardField(cards);
+
+        if(blackJackGame.userInGame(getTheUser().getName())){
+            ArrayList<Card> cards = blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards();
+            embed.printHandCardField(cards);
+        }
     }
+
+    private void startPlayerBustHandEmbed() {
+        if(embed == null){
+            System.err.print("Embed not created yet. ");
+            return;
+        }
+        if(blackJackGame.getLastPlayerToBeEliminated() != null) {
+            ArrayList<Card> cards = blackJackGame.getLastPlayerToBeEliminated().getMyHand().getHandCards();
+            embed.printHandCardField(cards);
+        }
+    }
+
+    private void startPublicHandEmbed(){
+        if(embed == null){
+            System.err.print("Embed not created yet. ");
+            return;
+        }
+        if(blackJackGame.userInGame(getTheUser().getName())){
+            ArrayList<Card> cards = blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards();
+            embed.printPublicHandCardField(cards);
+        }
+}
 
     private void startTableEmbed() {
         if(embed == null){
@@ -198,6 +277,20 @@ public class CommandManager {
             hands.add(blackJackGame.getPlayers().get(i).getMyHand().getHandCards());
         }
         embed.printTableField(names, hands);
+    }
+
+    private void startGameOverTableEmbed() {
+        if(embed == null){
+            System.err.print("Embed not created yet.");
+            return;
+        }
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<ArrayList<Card> > hands = new ArrayList<>();
+        for(int i = 0; i < blackJackGame.getNumPlayers(); ++i){
+            names.add(blackJackGame.getPlayers().get(i).getMyName());
+            hands.add(blackJackGame.getPlayers().get(i).getMyHand().getHandCards());
+        }
+        embed.printGameOverTableField(names, hands);
     }
 
     private String getCommandList() {
