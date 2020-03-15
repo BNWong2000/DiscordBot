@@ -7,38 +7,37 @@ import net.dv8tion.jda.api.entities.User;
 
 public class Player {
 
-  private Hand myHand;
-  private String myName;
-  private User user;
+    private Hand myHand;
+    private String myName;
+    private User user;
 
-  public Player( User user){
-    this.myName = user.getName();
-    this.user = user;
-    myHand = new Hand();
-  }
+    public Player( User user){
+        this.myName = user.getName();
+        this.user = user;
+        myHand = new Hand();
+    }
 
+    public Hand getMyHand() {
+        return myHand;
+    }
 
-  public Hand getMyHand() {
-    return myHand;
-  }
+    public void setMyHand(Hand myHand) {
+        this.myHand = myHand;
+    }
 
-  public void setMyHand(Hand myHand) {
-    this.myHand = myHand;
-  }
+    public String getMyName() {
+        return myName;
+    }
 
-  public String getMyName() {
-    return myName;
-  }
+    public void setMyName(String myName) {
+        this.myName = myName;
+    }
 
-  public void setMyName(String myName) {
-    this.myName = myName;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

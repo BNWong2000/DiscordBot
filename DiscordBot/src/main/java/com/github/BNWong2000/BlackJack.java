@@ -22,6 +22,7 @@ public class BlackJack {
     public BlackJack(Player host){
         players = new ArrayList<>();
         addPlayer(host);
+        theDeck = new Deck();
     }
 
     public ArrayList<Player> getPlayers(){
@@ -44,6 +45,26 @@ public class BlackJack {
             }
         }
         return null;
+    }
+
+    public int getNumPlayers(){
+        return players.size();
+    }
+
+    public String startGame(){
+        String output = "";
+        output += "Dealing cards...\n";
+        for(int i = 0; i < players.size(); ++i){
+            players.get(i).getMyHand().addCardToHand(theDeck.drawCard()); //by default, all cards are face up unless otherwise specified.
+            players.get(i).getMyHand().getHandCards().get(0).setFaceDown();
+            players.get(i).getMyHand().addCardToHand(theDeck.drawCard());
+        }
+        return output;
+    }
+    public void playRound(){
+        for(int i = 0; i < players.size(); ++i){
+
+        }
     }
 
     public String getPlayerListString(){

@@ -5,6 +5,7 @@ public class Card implements Suits, CardValues{
 
     private int suit;
     private int value;
+    private boolean faceDown;
 
     public String getSuit() {
         return suitList[suit];
@@ -25,25 +26,54 @@ public class Card implements Suits, CardValues{
     public Card(int suit, int value){
         this.suit = suit;
         this.value = value;
+        this.faceDown = false;
         //System.out.print("Suit: " + suitList[suit] + " Value: " + valueList[value]);
     }
 
+    public Card(int suit, int value, boolean faceDown){
+        this.suit = suit;
+        this.value = value;
+        this.faceDown = faceDown;
+        //System.out.print("Suit: " + suitList[suit] + " Value: " + valueList[value]);
+    }
+
+    public boolean isFaceDown() {
+        return faceDown;
+    }
+
+    public void setFaceDown() {
+        this.faceDown = true;
+    }
+
     public String printCard(){
+        if (faceDown) {
+            return printFaceDown();
+        }else{
+            return printFaceUpCard();
+        }
+    }
+    public String printFaceDown(){
+        String result = printHorizontalLine() + "\n";
+        int numlines = 7, numBlocks = 8;
+        for(int i = 0; i < numlines; ++i){
+            result += "|\u2003";
+            for(int j = 0; j < numBlocks; ++j){
+                result += "\u25A0";
+            }
+            result += "\u2003|\n";
+        }
+        result += printHorizontalLine();
+        return result;
+    }
+
+    public String printFaceUpCard(){
         String result = printHorizontalLine();
         result += "\n";
-//        result += "|" + getSuitSymbol();
-//        result +=  printWhiteSpace()  + "|\n";
         result += topOfCardSuit[suit];
-//        result += "|" + getValue();
-//        result +=  printWhiteSpace() + "|\n";
         result += topOfCardValue[value];
         result += "|" + printWhiteSpace() + "\u2003" + "|\n";
         result += "|" + printWhiteSpace() + "\u2003" + "|\n";
         result += "|" + printWhiteSpace() + "\u2003" + "|\n";
-//        result += "|" +  printWhiteSpace() ;
-//        result += getValue() + "|\n";
-//        result += "|" +  printWhiteSpace() ;
-//        result += getSuitSymbol() + "|\n";
         result += bottomOfCardValue[value];
         result += bottomOfCardSuit[suit];
         result += printHorizontalLine();
@@ -64,12 +94,16 @@ public class Card implements Suits, CardValues{
     }
 
     private String printHorizontalLine(){
-        return "---------------";
+        return "--------------------";
     }
 
     @Override
     public String toString() {
         String result = (valueList[value] + " of " + suitList[suit] + "\n");
+        if(faceDown){
+            result += "(FACEDOWN)\n";
+        }
         return result;
     }
+
 }

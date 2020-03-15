@@ -13,6 +13,11 @@ public class CommandManager {
     private EmbedManager embed;
     private BlackJack blackJackGame;
     private User theUser;
+    private boolean gameStarted;
+
+    public boolean getGameStarted(){
+        return gameStarted;
+    }
 
     public String getMessage(){
         return message;
@@ -29,8 +34,6 @@ public class CommandManager {
     public BlackJack getBlackJackGame(){
         return blackJackGame;
     }
-
-
 
     public void setMessage(String message) {
         this.message = message;
@@ -66,13 +69,13 @@ public class CommandManager {
                 break;
             case "!BlackJack":
                 if(blackJackGame != null){
-                    if(blackJackGame.userInGame(theUser.getName().toString())){
+                    if(blackJackGame.userInGame(theUser.getName())){
                         output = "User is already in the game!";
                     }else {
                         if(blackJackGame.getStatus() == BlackJack.GameStatus.LOOKINGFORPLAYERS){
                             blackJackGame.addPlayer(new Player(theUser));
                             needsEmbed = true;
-                            output = "Adding " + theUser.getName().toString() + " to the game...";
+                            output = "Adding " + theUser.getName() + " to the game...";
                         }else{
                             output = "Cannot join the game at this time.";
                         }
@@ -85,15 +88,51 @@ public class CommandManager {
                 }
 
                 if(needsEmbed){
-                    embed = new EmbedManager("BlackJack Game:");
+                    embed = new EmbedManager("BlackJack Game Started");
                     embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg");
                     startGameEmbed();
+                }
+                break;
+            case "!Start":
+                if(blackJackGame != null){
+                    if(blackJackGame.userInGame(theUser.getName())){
+                        if(blackJackGame.getNumPlayers() < 2){
+                            output = "Need more players. ";
+                        }else if(blackJackGame.getStatus() == BlackJack.GameStatus.LOOKINGFORPLAYERS){
+                            blackJackGame.setStatus(BlackJack.GameStatus.STARTED);
+                            output = "Starting the game...\n";
+                            output += startGame();
+                            needsEmbed = true;
+                        }else if(blackJackGame.getStatus() == BlackJack.GameStatus.STARTED){
+                            output = "Game as already started. ";
+                        }else{
+                            output = "Cannot start the game at this time.";
+                        }
+                    }else{
+                        output = "Only players who have joined the game can start it. ";
+                    }
+                }else{
+                    output = "Cannot start a game that doesn't exist. ";
+                }
+                if(needsEmbed){
+                    embed = new EmbedManager("The Table:");
+                    startTableEmbed();
                 }
                 break;
             default:
                 output = "Invalid command. type !commands for a list of commands.";
 
         }
+        return output;
+    }
+
+    private String startGame(){
+        gameStarted = true;
+        return blackJackGame.startGame();
+    }
+
+    public String getGameResponse(){
+        String output = "";
         return output;
     }
 
@@ -108,7 +147,7 @@ public class CommandManager {
                         output = "User is not in the game!";
                     } else {
                         output = "Your current hand: \n";
-                        output += blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards().get(1).printCard();
+                        //output += blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards().get(1).printCard();
                         needsEmbed = true;
                     }
                 }else{
@@ -144,10 +183,21 @@ public class CommandManager {
             return;
         }
         ArrayList<Card> cards = blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards();
-        embed.printCardField(cards);
+        embed.printHandCardField(cards);
+    }
 
-
-
+    private void startTableEmbed() {
+        if(embed == null){
+            System.err.print("Embed not created yet.");
+            return;
+        }
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<ArrayList<Card> > hands = new ArrayList<>();
+        for(int i = 0; i < blackJackGame.getNumPlayers(); ++i){
+            names.add(blackJackGame.getPlayers().get(i).getMyName());
+            hands.add(blackJackGame.getPlayers().get(i).getMyHand().getHandCards());
+        }
+        embed.printTableField(names, hands);
     }
 
     private String getCommandList() {
@@ -159,5 +209,9 @@ public class CommandManager {
 
     protected void getWords() {
         splitMessage = Arrays.asList(message.split(" "));
+    }
+
+    public CommandManager(){
+        gameStarted = false;
     }
 }

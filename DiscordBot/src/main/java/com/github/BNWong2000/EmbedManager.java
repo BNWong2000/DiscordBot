@@ -33,12 +33,27 @@ public class EmbedManager {
         }
     }
 
+    public void printHandCardField(ArrayList<Card> cards){
+        for(int i = 0; i < cards.size(); ++i){
+            myEmbed.addField(cards.get(i).toString(), cards.get(i).printFaceUpCard(), true);
+        }
+        //myEmbed.addField("Testing FaceDown", cards.get(0).printFaceDown(), true );
+    }
+
+    public void printTableField(ArrayList<String> players, ArrayList<ArrayList<Card> > hands){
+        for(int i = 0; i < players.size(); ++i){
+            myEmbed.addField("Cards for player: ", players.get(i), false);
+            printCardField(hands.get(i));
+            myEmbed.addBlankField(false);
+        }
+    }
+
     public void printCardField(ArrayList<Card> cards){
         for(int i = 0; i < cards.size(); ++i){
             myEmbed.addField(cards.get(i).toString(), cards.get(i).printCard(), true);
         }
+        //myEmbed.addField("Testing FaceDown", cards.get(0).printFaceDown(), true );
     }
-
 
 
 }

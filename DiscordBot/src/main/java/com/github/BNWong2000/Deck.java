@@ -5,6 +5,7 @@ import java.util.Random;
 
 public class Deck {
     private Card[] deck;
+    private int topOfDeck;
     Deck(){
         deck = new Card[52];
         int N = 0;
@@ -15,10 +16,10 @@ public class Deck {
             }
         }
         shuffle();
+        topOfDeck = 0;
     }
 
     public void shuffle(){
-        
         Random rand = new Random();
         
         for(int i = 0; i < deck.length; ++i){
@@ -29,4 +30,9 @@ public class Deck {
         }
     }
 
+    public Card drawCard() {
+        Card output = deck[topOfDeck];
+        topOfDeck++;
+        return output;
+    }
 }
