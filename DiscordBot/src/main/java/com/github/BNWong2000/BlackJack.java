@@ -129,14 +129,7 @@ public class BlackJack {
     public String endTurn(){
         String result = "";
         if (currentTurnIndex == (players.size()-1)){
-            if(allPlayersStand){
-                result += "All players Stood. Game Over. ";
-                gameOver = true;
-            }else {
-                currentTurnIndex = 0;
-                allPlayersStand = true;
-                result += "End of round. \n" + players.get(0).getMyName() + " is up next. ";
-            }
+            gameOver = true;
         }else{
             currentTurnIndex++;
             result += players.get(currentTurnIndex).getMyName() + " is up next.";

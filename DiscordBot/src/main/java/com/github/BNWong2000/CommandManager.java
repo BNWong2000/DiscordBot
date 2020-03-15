@@ -10,7 +10,9 @@ public class CommandManager {
     private String message;
     private List<String> splitMessage;
     private boolean needsEmbed;
+    private boolean needsPrivateMessageEmbed;
     private EmbedManager embed;
+    private EmbedManager privateMessageEmbed;
     private BlackJack blackJackGame;
     private User theUser;
     private boolean gameStarted;
@@ -51,14 +53,26 @@ public class CommandManager {
         this.needsEmbed = needsEmbed;
     }
 
+    public boolean isNeedsPrivateMessageEmbed() {
+        return needsPrivateMessageEmbed;
+    }
+
+    public void setNeedsPrivateMessageEmbed(boolean needsPrivateMessageEmbed) {
+        this.needsPrivateMessageEmbed = needsPrivateMessageEmbed;
+    }
 
     public EmbedManager getEmbed(){
         return embed;
     }
 
+    public EmbedManager getPrivateMessageEmbed() {
+        return privateMessageEmbed;
+    }
+
     public String getResponse(){
         getWords();
         needsEmbed = false;
+        needsPrivateMessageEmbed = false;
         String output;
         switch (splitMessage.get(0)) {
             case "!Dank":
@@ -103,6 +117,7 @@ public class CommandManager {
                             output = "Starting the game...\n";
                             output += startGame();
                             needsEmbed = true;
+                            needsPrivateMessageEmbed = true;
                         }else if(blackJackGame.getStatus() == BlackJack.GameStatus.STARTED){
                             output = "Game as already started. ";
                         }else{
@@ -117,6 +132,13 @@ public class CommandManager {
                 if(needsEmbed){
                     embed = new EmbedManager("The Table:");
                     startTableEmbed();
+                }
+                if(needsPrivateMessageEmbed){
+
+                        privateMessageEmbed = new EmbedManager("Game Started.");
+                        startPrivateHandEmbed();
+                        sendPrivateMessage( "Your Hand:");
+
                 }
                 break;
             default:
@@ -140,6 +162,7 @@ public class CommandManager {
         String output;
         getWords();
         needsEmbed = false;
+        needsPrivateMessageEmbed = false;
         if(!getTheUser().getName().equals(blackJackGame.getCurrentTurnName())){
             if(getSplitMessage().get(0).equals("!End")){
                 output = "ending game...";
@@ -160,8 +183,12 @@ public class CommandManager {
                     startPlayerBustHandEmbed();
                 }else if(blackJackGame.getNumPlayers() > 1) {
                     needsEmbed = true;
+                    needsPrivateMessageEmbed = true;
+                    privateMessageEmbed = new EmbedManager(getTheUser().getName() + "'s Hand:");
                     embed = new EmbedManager(getTheUser().getName() + "'s Hand:");
                     startPublicHandEmbed();
+                    startPrivateHandEmbed();
+                    sendPrivateMessage("Your Hand: ");
                 }else{
                     gameStarted = false;
                     blackJackGame = null;
@@ -169,8 +196,8 @@ public class CommandManager {
                 break;
             case "!Stand":
                 output = "Standing.\n";
-                if(blackJackGame.isAllPlayersStand() && blackJackGame.getCurrentTurnIndex() == blackJackGame.getNumPlayers()-1){
-                    output += "\n All Players stood last round. Game Over. Folding Cards...";
+                if(blackJackGame.getCurrentTurnIndex() == blackJackGame.getNumPlayers()-1){ //blackJackGame.isAllPlayersStand() &&
+                    output += "\n Round Over. Revealing Cards...";
                     needsEmbed = true;
                     String winner = blackJackGame.getWinner();
                     embed = new EmbedManager("Winner: " + winner);
@@ -193,6 +220,7 @@ public class CommandManager {
     public String getDMResponse(){
         String output;
         setNeedsEmbed(false);
+        needsPrivateMessageEmbed = false;
         getWords();
         switch(getSplitMessage().get(0)) {
             case "!Hand":
@@ -200,7 +228,7 @@ public class CommandManager {
                     if (!blackJackGame.userInGame(getTheUser().getName().toString())) {
                         output = "User is not in the game!";
                     } else {
-                        output = "Your current hand: \n";
+                        output = "Getting your current hand: \n";
                         //output += blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards().get(1).printCard();
                         needsEmbed = true;
                     }
@@ -211,6 +239,7 @@ public class CommandManager {
                     embed = new EmbedManager("Your Hand: ");
                     //embed.setImage("http://www.mrhumagames.com/BrandenBot/BlackJackLogo.jpg");
                     startHandEmbed();
+                    //sendPrivateMessage(output);
                 }
                 break;
             default:
@@ -231,6 +260,18 @@ public class CommandManager {
         embed.setFields(names, description);
     }
 
+    private void startPrivateHandEmbed(){
+        if(embed == null){
+            System.err.print("Embed not created yet. ");
+            return;
+        }
+
+        if(blackJackGame.userInGame(getTheUser().getName())){
+            ArrayList<Card> cards = blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards();
+            privateMessageEmbed.printHandCardField(cards);
+        }
+    }
+
     private void startHandEmbed(){
         if(embed == null){
             System.err.print("Embed not created yet. ");
@@ -240,6 +281,18 @@ public class CommandManager {
         if(blackJackGame.userInGame(getTheUser().getName())){
             ArrayList<Card> cards = blackJackGame.getUserByName(getTheUser().getName()).getMyHand().getHandCards();
             embed.printHandCardField(cards);
+        }
+    }
+
+    private void startHandEmbed(User thisUser){
+        if(embed == null){
+            System.err.print("Embed not created yet. ");
+            return;
+        }
+
+        if(blackJackGame.userInGame(thisUser.getName())){
+            ArrayList<Card> cards = blackJackGame.getUserByName(thisUser.getName()).getMyHand().getHandCards();
+            privateMessageEmbed.printHandCardField(cards);
         }
     }
 
@@ -307,4 +360,24 @@ public class CommandManager {
     public CommandManager(){
         gameStarted = false;
     }
+
+    public void sendPrivateMessage(String content) {
+        theUser.openPrivateChannel()
+                .flatMap(channel -> channel.sendMessage(content))
+                .queue();
+        if(needsPrivateMessageEmbed) {
+            theUser.openPrivateChannel().flatMap(channel -> channel.sendMessage(privateMessageEmbed.getMyEmbed().build())).queue();
+        }
+    }
+
+    public void sendPrivateMessage(User user, String content) {
+        user.openPrivateChannel()
+                .flatMap(channel -> channel.sendMessage(content))
+                .queue();
+        if(needsPrivateMessageEmbed) {
+            user.openPrivateChannel().flatMap(channel -> channel.sendMessage(privateMessageEmbed.getMyEmbed().build())).queue();
+        }
+    }
+
+
 }
