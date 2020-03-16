@@ -4,6 +4,7 @@ import jdk.nashorn.internal.scripts.JD;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -51,7 +52,8 @@ public class Main{
 
         ChatManager reader = new ChatManager();
         builder.setToken(token);
-        builder.setStatus(OnlineStatus.IDLE);
+        builder.setStatus(OnlineStatus.ONLINE);
+        builder.setActivity(Activity.listening("!blackjack"));
         builder.addEventListeners(reader);
         builder.build();
     }
