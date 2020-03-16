@@ -102,9 +102,6 @@ public class BlackJack {
             String result = "BUST! Drew: " + outputCard + ",\n Player: ";
             lastPlayerToBeEliminated = players.get(currentTurnIndex);
             players.remove(currentTurnIndex);
-            if(currentTurnIndex == (players.size())){
-                currentTurnIndex = 0;
-            }
             if(players.size() == 1){
                 String winnerName = players.get(0).getMyName();
                 endGame();

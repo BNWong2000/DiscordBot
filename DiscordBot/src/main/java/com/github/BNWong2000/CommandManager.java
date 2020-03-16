@@ -16,6 +16,7 @@ public class CommandManager {
     private BlackJack blackJackGame;
     private User theUser;
     private boolean gameStarted;
+    private ArrayList<EmbedManager> tempHandEmbeds;
 
     public boolean getGameStarted(){
         return gameStarted;
@@ -117,7 +118,14 @@ public class CommandManager {
                             output = "Starting the game...\n";
                             output += startGame();
                             needsEmbed = true;
-                            needsPrivateMessageEmbed = true;
+                            //needsPrivateMessageEmbed = true;
+                            tempHandEmbeds = new ArrayList<>();
+                            for(int i = 0; i < blackJackGame.getNumPlayers(); ++i){
+                                tempHandEmbeds.add(new EmbedManager("Hands"));
+                                ArrayList<Card> cards = blackJackGame.getPlayers().get(i).getMyHand().getHandCards();
+                                tempHandEmbeds.get(i).printHandCardField(cards);
+                                sendPrivateMessage(blackJackGame.getPlayers().get(i).getUser(), "Cards: ", tempHandEmbeds.get(i));
+                            }
                         }else if(blackJackGame.getStatus() == BlackJack.GameStatus.STARTED){
                             output = "Game as already started. ";
                         }else{
@@ -133,13 +141,13 @@ public class CommandManager {
                     embed = new EmbedManager("The Table:");
                     startTableEmbed();
                 }
-                if(needsPrivateMessageEmbed){
-
-                        privateMessageEmbed = new EmbedManager("Game Started.");
-                        startPrivateHandEmbed();
-                        sendPrivateMessage( "Your Hand:");
-
-                }
+//                if(needsPrivateMessageEmbed){
+//
+//                        privateMessageEmbed = new EmbedManager("Game Started.");
+//                        startPrivateHandEmbed();
+//                        sendPrivateMessage( "Your Hand:");
+//
+//                }
                 break;
             default:
                 output = "Invalid command. type !commands for a list of commands.";
@@ -156,6 +164,7 @@ public class CommandManager {
     public void endGame(){
         blackJackGame = null;
         gameStarted = false;
+        tempHandEmbeds = null;
     }
 
     public String getGameResponse(){
@@ -178,9 +187,18 @@ public class CommandManager {
                 output = "Getting your Card...";
                 output += blackJackGame.hit();
                 if(blackJackGame.getLastPlayerToBeEliminated() != null && blackJackGame.getLastPlayerToBeEliminated().getMyName() == getTheUser().getName()){
-                    needsEmbed = true;
-                    embed = new EmbedManager(getTheUser().getName() + "'s Hand:");
-                    startPlayerBustHandEmbed();
+
+                    if(blackJackGame.getCurrentTurnIndex() == blackJackGame.getNumPlayers()){
+                        output += "\n Round Over. Revealing Cards...";
+                        //needsEmbed = true;
+                        String winner = blackJackGame.getWinner();
+                        embed = new EmbedManager("Winner: " + winner);
+                        startGameOverTableEmbed();
+                    }else{
+                        needsEmbed = true;
+                        embed = new EmbedManager(getTheUser().getName() + "'s Hand:");
+                        startPlayerBustHandEmbed();
+                    }
                 }else if(blackJackGame.getNumPlayers() > 1) {
                     needsEmbed = true;
                     needsPrivateMessageEmbed = true;
@@ -373,13 +391,14 @@ public class CommandManager {
         }
     }
 
-    public void sendPrivateMessage(User user, String content) {
+    public void sendPrivateMessage(User user, String content, EmbedManager embed) {
         user.openPrivateChannel()
                 .flatMap(channel -> channel.sendMessage(content))
                 .queue();
-        if(needsPrivateMessageEmbed) {
-            user.openPrivateChannel().flatMap(channel -> channel.sendMessage(privateMessageEmbed.getMyEmbed().build())).queue();
-        }
+        //System.out.println(user.getName());
+
+            user.openPrivateChannel().flatMap(channel -> channel.sendMessage(embed.getMyEmbed().build())).queue();
+
     }
 
 

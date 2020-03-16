@@ -16,6 +16,7 @@ public class Deck {
             }
         }
         shuffle();
+        shuffle();
         topOfDeck = 0;
     }
 
