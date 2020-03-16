@@ -75,13 +75,13 @@ public class CommandManager {
         needsPrivateMessageEmbed = false;
         String output;
         switch (splitMessage.get(0)) {
-            case "!Dank":
+            case "!DANK":
                 output = "memes";
                 break;
-            case "!commands":
+            case "!COMMANDS":
                 output = getCommandList();
                 break;
-            case "!BlackJack":
+            case "!BLACKJACK":
                 if(blackJackGame != null){
                     if(blackJackGame.userInGame(theUser.getName())){
                         output = "User is already in the game!";
@@ -107,7 +107,7 @@ public class CommandManager {
                     startGameEmbed();
                 }
                 break;
-            case "!Start":
+            case "!START":
                 if(blackJackGame != null){
                     if(blackJackGame.userInGame(theUser.getName())){
                         if(blackJackGame.getNumPlayers() < 2){
@@ -164,7 +164,7 @@ public class CommandManager {
         needsEmbed = false;
         needsPrivateMessageEmbed = false;
         if(!getTheUser().getName().equals(blackJackGame.getCurrentTurnName())){
-            if(getSplitMessage().get(0).equals("!End")){
+            if(getSplitMessage().get(0).equals("!END")){
                 output = "ending game...";
                 endGame();
                 return output;
@@ -174,7 +174,7 @@ public class CommandManager {
             }
         }
         switch(getSplitMessage().get(0)){
-            case "!Hit":
+            case "!HIT":
                 output = "Getting your Card...";
                 output += blackJackGame.hit();
                 if(blackJackGame.getLastPlayerToBeEliminated() != null && blackJackGame.getLastPlayerToBeEliminated().getMyName() == getTheUser().getName()){
@@ -194,7 +194,7 @@ public class CommandManager {
                     blackJackGame = null;
                 }
                 break;
-            case "!Stand":
+            case "!STAND":
                 output = "Standing.\n";
                 if(blackJackGame.getCurrentTurnIndex() == blackJackGame.getNumPlayers()-1){ //blackJackGame.isAllPlayersStand() &&
                     output += "\n Round Over. Revealing Cards...";
@@ -206,7 +206,7 @@ public class CommandManager {
                 }
                 output += blackJackGame.endTurn();
                 break;
-            case "!End":
+            case "!END":
                 output = "ending the game.\n";
                 endGame();
                 break;
@@ -223,7 +223,7 @@ public class CommandManager {
         needsPrivateMessageEmbed = false;
         getWords();
         switch(getSplitMessage().get(0)) {
-            case "!Hand":
+            case "!HAND":
                 if(blackJackGame != null){
                     if (!blackJackGame.userInGame(getTheUser().getName().toString())) {
                         output = "User is not in the game!";
@@ -355,6 +355,9 @@ public class CommandManager {
 
     protected void getWords() {
         splitMessage = Arrays.asList(message.split(" "));
+        String temp = splitMessage.get(0);
+        temp = temp.toUpperCase();
+        splitMessage.set(0, temp);
     }
 
     public CommandManager(){
